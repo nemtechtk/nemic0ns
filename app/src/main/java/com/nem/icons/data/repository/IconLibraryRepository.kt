@@ -1,5 +1,8 @@
 package com.nem.icons.data.repository
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,14 +28,13 @@ class IconLibraryRepository(private val context: Context) {
     private val _icons = MutableStateFlow<List<StyledIcon>>(emptyList())
     val icons: StateFlow<List<StyledIcon>> = _icons.asStateFlow()
 
-    init {
-        // Load existing icons on startup
-        kotlinx.coroutines.GlobalScope.apply {
-            kotlinx.coroutines.launch(Dispatchers.IO) {
-                _icons.value = loadAll()
-            }
-        }
+   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+init {
+    repositoryScope.launch {
+        _icons.value = loadAll()
     }
+}
 
     suspend fun save(icon: StyledIcon) = withContext(Dispatchers.IO) {
         // Save bitmap files
