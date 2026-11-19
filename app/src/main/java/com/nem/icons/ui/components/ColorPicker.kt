@@ -1,6 +1,7 @@
 package com.nem.icons.ui.components
 
-import androidx.compose.foundation.background
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensityation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -127,7 +128,8 @@ fun ColorPickerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    fun rgbField(label: String, v: String, onV: (String) -> Unit) {
+                    @Composable
+fun rgbField(label: String, v: String, onV: (String) -> Unit) {
                         OutlinedTextField(
                             value = v,
                             onValueChange = { s ->
@@ -251,8 +253,7 @@ private fun HueBar(
     }
 }
 
-val LocalDensity: ProvidableCompositionLocal<androidx.compose.ui.unit.Density>
-    get() = androidx.compose.ui.platform.LocalDensity
+
 
 private fun colorToHex(c: Color): String {
     val r = (c.red * 255).toInt()
